@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ 모바일 대응 -->
+  <title>재활용 OX 퀴즈</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>♻️ 재활용 OX 퀴즈</h1>
+    <div id="quiz-box">
+      <p id="question">퀴즈가 여기에 나옵니다</p>
+      <p id="feedback"></p>
+      <div class="buttons">
+        <button onclick="answer(true)">⭕</button>
+        <button onclick="answer(false)">❌</button>
+      </div>
+    </div>
+    <div id="result-box" class="hidden">
+      <p id="result"></p>
+      <button onclick="restart()">다시하기</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
