@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>재활용 OX 퀴즈</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    #quiz-box, #result-box {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    #question {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    #feedback {
+      margin-top: 15px;
+      font-size: 16px;
+      white-space: pre-wrap;
+    }
+
+    button {
+      font-size: 24px;
+      padding: 10px 25px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #3498db;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 500px) {
+      button {
+        font-size: 20px;
+        padding: 10px 20px;
+      }
+
+      #question {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>재활용 OX 퀴즈</h1>
+
+  <div id="quiz-box">
+    <div id="question">문제가 여기에 표시됩니다</div>
+    <button onclick="answer(true)">⭕</button>
+    <button onclick="answer(false)">❌</button>
+    <div id="feedback"></div>
+  </div>
+
+  <div id="result-box" class="hidden">
+    <h2 id="result"></h2>
+    <button onclick="restart()">다시하기</button>
+  </div>
+
+  <script>
+    const quiz = [
+      { 
+        question: "종이컵은 종이로 만들어졌으니 종이로 분리배출해야 한다.", 
+        answer: false, 
+        explanation: "겉면이 코팅되어 있어 종이류가 아닌 일반 쓰레기나 종량제 봉투에 버려야 해요." 
+      },
+      { 
+        question: "플라스틱 용기 안에 음식물이 남아 있어도 그대로 분리배출해도 된다.", 
+        answer: false, 
+        explanation: "플라스틱에 음식물이 묻어 있으면 재활용이 어려워요. 깨끗이 헹군 뒤 분리배출해야 해요." 
+      },
+      { 
+        question: "페트병은 라벨을 제거한 뒤 압착해서 버리는 것이 좋다.", 
+        answer: true, 
+        explanation: "라벨을 제거하고 눌러서 버리면 공간도 절약되고 재활용 효율도 높아져요." 
+      },
+      { 
+        question: "유리병은 병뚜껑을 분리하고 버리는 것이 바람직하다.", 
+        answer: true, 
+        explanation: "뚜껑은 재질이 다르기 때문에 따로 분리해서 배출해야 해요." 
+      },
+      { 
+        question: "깨진 유리도 유리병과 같이 배출해도 된다.", 
+        answer: false, 
+        explanation: "깨진 유리는 위험하고 재활용이 어려워 일반 쓰레기로 버려야 해요." 
+      },
+      { 
+        question: "깨끗해 보이는 종이팩은 일반 종이와 같이 배출해도 된다.", 
+        answer: false, 
+        explanation: "종이팩은 일반 종이와 섬유 구조가 달라 따로 분리해서 배출해야 해요." 
+      },
+      { 
+        question: "비닐은 음식물이 묻어 있어도 재활용이 가능하다.", 
+        answer: false, 
+        explanation: "음식물이 묻은 비닐은 재활용이 어렵기 때문에 깨끗한 것만 배출해야 해요." 
+      },
+      { 
+        question: "텀블러 같은 재사용 가능한 물건을 재활용함에 넣으면 좋다.", 
+        answer: false, 
+        explanation: "텀블러는 재사용 가능한 제품이지 재활용 품목이 아니에요. 위시사이클링의 예시입니다." 
+      },
+      { 
+        question: "깨끗이 세척한 플라스틱 빨대는 재활용할 수 있다.", 
+        answer: false, 
+        explanation: "작고 가벼워 기계에서 걸러지지 않아 실제로는 재활용되지 않아요." 
+      },
+      { 
+        question: "종이 영수증은 재활용할 수 없다.", 
+        answer: true, 
+        explanation: "영수증은 열화지로 만들어져 있어 재활용이 불가능합니다." 
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const questionBox = document.getElementById("question");
+      const resultBox = document.getElementById("feedback");
+      questionBox.textContent = quiz[current].question;
+      resultBox.textContent = "";
+    }
+
+    function answer(userAnswer) {
+      const isCorrect = userAnswer === quiz[current].answer;
+      const resultBox = document.getElementById("feedback");
+      const explanation = quiz[current].explanation;
+
+      if (isCorrect) {
+        score++;
+        resultBox.textContent = `✅ 정답입니다!\n${explanation}`;
+        resultBox.style.color = "green";
+      } else {
+        resultBox.textContent = `❌ 오답입니다!\n${explanation}`;
+        resultBox.style.color = "red";
+      }
+
+      setTimeout(() => {
+        current++;
+        if (current < quiz.length) {
+          showQuestion();
+        } else {
+          document.getElementById("quiz-box").classList.add("hidden");
+          document.getElementById("result-box").classList.remove("hidden");
+          document.getElementById("result").textContent = `당신의 점수는 ${score} / ${quiz.length}점입니다!`;
+        }
+      }, 2000);
+    }
+
+    function restart() {
+      current = 0;
+      score = 0;
+      document.getElementById("quiz-box").classList.remove("hidden");
+      document.getElementById("result-box").classList.add("hidden");
+      showQuestion();
+    }
+
+    window.onload = showQuestion;
+  </script>
+</body>
+</html>
